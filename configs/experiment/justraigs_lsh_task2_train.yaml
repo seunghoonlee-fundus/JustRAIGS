@@ -1,0 +1,165 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=cfp_ood
+
+defaults:
+  - override /data: justraigs_lsh
+  - override /model: justraigs_lsh_task2
+  - override /callbacks: default
+  - override /trainer: default
+  - override /logger: null
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+task_name: justraigs_lsh3
+tags: ["task2"]
+
+seed: 42
+
+callbacks:
+  model_summary:
+    max_depth: 10
+
+  model_checkpoint:
+    monitor: "val_hd"
+    mode: "min"
+    save_top_k: 1
+    filename: "best-{epoch:02d}-{val_hd:.5f}"
+
+  model_checkpoint_per_label1:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_ANRS"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_ANRS-{epoch:02d}-{val_hd_ANRS:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label2:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_ANRI"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_ANRI-{epoch:02d}-{val_hd_ANRI:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label3:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_RNFLDS"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_RNFLDS-{epoch:02d}-{val_hd_RNFLDS:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label4:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_RNFLDI"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_RNFLDI-{epoch:02d}-{val_hd_RNFLDI:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label5:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_BCLVS"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_BCLVS-{epoch:02d}-{val_hd_BCLVS:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label6:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_BCLVI"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_BCLVI-{epoch:02d}-{val_hd_BCLVI:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label7:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_NVT"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_NVT-{epoch:02d}-{val_hd_NVT:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label8:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_DH"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_DH-{epoch:02d}-{val_hd_DH:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label9:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_LD"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_LD-{epoch:02d}-{val_hd_LD:.5f}"
+    save_weights_only: True
+
+  model_checkpoint_per_label10:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: ${paths.output_dir}/checkpoints
+    monitor: "val_hd_LC"
+    mode: "min"
+    save_last: False
+    auto_insert_metric_name: False
+    save_top_k: 1
+    filename: "best-val_hd_LC-{epoch:02d}-{val_hd_LC:.5f}"
+    save_weights_only: True
+
+  early_stopping: 
+    monitor: "val_hd"
+    patience: 10
+    verbose: True
+    mode: min
+    log_rank_zero_only: True
+  lr_monitor: null
+
+
+trainer:
+  max_epochs: 100
+  num_sanity_val_steps: 0
+  reload_dataloaders_every_n_epochs: 1
+
+data:
+  train_batch_size: 32
+  num_workers: 4
+  pin_memory: True
+  img_root: IMG_ROOT
+  val_full: False
+  test_full: True
+
+logger:
+  mlflow:
+    run_name: M{${model.net.model_name}}-LR{${model.optimizer.lr}}

@@ -1,0 +1,18 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - data: justraigs_lsh
+  - model: justraigs_lsh
+  - logger: null
+  - trainer: default
+  - paths: default
+  - hydra: default
+  - experiment: justraigs_lsh_task2_eval
+  
+task_name: "mnist"
+
+tags: ["dev"]
+
+# passing checkpoint path is necessary for evaluation
+ckpt_path: ???

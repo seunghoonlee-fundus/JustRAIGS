@@ -1,0 +1,24 @@
+defaults:
+  - _self_
+  - data: justraigs_lsh
+  - model: justraigs_lsh
+  - callbacks: default
+  - logger: null
+  - trainer: default
+  - paths: default
+  - hydra: default
+
+  - experiment: justraigs_lsh_task2_train
+  - hparams_search: null
+  - debug: null
+
+task_name: mnist
+
+tags: ["dev"]
+
+train: True
+test: True
+
+ckpt_path: null
+
+seed: 42

@@ -1,0 +1,56 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=cfp_ood
+
+defaults:
+  - override /data: justraigs_lsh
+  - override /model: justraigs_lsh_task1
+  - override /callbacks: default
+  - override /trainer: default
+  - override /logger: null
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+task_name: justraigs_lsh3-task1
+tags: ["task1"]
+
+seed: 42
+
+callbacks:
+  model_summary:
+    max_depth: 10
+
+  model_checkpoint:
+    monitor: "val_sen@spe95"
+    mode: "min"
+    save_top_k: 1
+    filename: "best-sen-{epoch:02d}-{val_hd:.5f}"
+
+  early_stopping: 
+    monitor: "val_sen@spe95"
+    patience: 10
+    verbose: True
+    mode: max
+    log_rank_zero_only: True
+  lr_monitor: null
+
+
+trainer:
+  max_epochs: 100
+  num_sanity_val_steps: 0
+  reload_dataloaders_every_n_epochs: 1
+
+data:
+  train_batch_size: 32
+  val_batch_size: 256
+  num_workers: 4
+  pin_memory: True
+  img_root: IMG_ROOT
+  val_full: True
+  test_full: True
+
+logger:
+  mlflow:
+    run_name: M{${model.net.model_name}}-LR{${model.optimizer.lr}}

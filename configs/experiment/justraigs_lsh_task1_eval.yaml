@@ -1,0 +1,30 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=cfp_ood
+
+defaults:
+  - override /data: justraigs_lsh
+  - override /model: justraigs_lsh_task1
+  - override /logger: null
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+task_name: justraigs_eval_task1
+tags: ["task1"]
+
+seed: 42
+
+data:
+  test_batch_size: 70
+  num_workers: 4
+  pin_memory: True
+  img_root: IMG_ROOT
+
+trainer:
+  devices: 3
+
+logger:
+  mlflow:
+    run_name: M{${model.net.model_name}}

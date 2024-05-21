@@ -1,0 +1,27 @@
+_target_: src.tasks.justraigs_lsh.lm.Task1JustRAIGSLM
+
+optimizer:
+  _target_: torch.optim.AdamW
+  _partial_: true
+  lr: 1e-4
+
+net:
+  _target_: src.tasks.justraigs_lsh.model.TIMMCLSModel
+  model_name: resnet50
+  num_classes: 1
+  pretrained: True
+
+scheduler:
+  _target_: timm.scheduler.cosine_lr.CosineLRScheduler
+  _partial_: true
+  warmup_t : 10
+  t_initial: ${trainer.max_epochs}
+  warmup_prefix: True
+  lr_min: 1e-9
+  warmup_lr_init: 1e-6
+
+scheduling: True
+
+# compile model for faster training with pytorch 2.0
+compile: False
+
